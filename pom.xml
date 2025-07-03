@@ -14,6 +14,11 @@
   <properties>
     <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <acf.version>0.5.1-SNAPSHOT</acf.version> <!-- Check for latest ACF version -->
+    <hikaricp.version>5.1.0</hikaricp.version>
+    <bstats.version>3.0.2</bstats.version>
+    <lombok.version>1.18.32</lombok.version>
+    <paper.version>1.21.6-R0.1-SNAPSHOT</paper.version> <!-- Updated Paper API version -->
   </properties>
 
   <build>
@@ -38,6 +43,19 @@
             <goals>
               <goal>shade</goal>
             </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <!-- We don't want to shade dependencies that satellite plugins will use from the core -->
+              <artifactSet>
+                <excludes>
+                  <exclude>co.aikar:acf-paper</exclude>
+                  <exclude>com.zaxxer:HikariCP</exclude>
+                  <exclude>org.bstats:*</exclude>
+                  <!-- Lombok is compile-time only, but good practice to exclude if ever not 'provided' -->
+                  <exclude>org.projectlombok:lombok</exclude>
+                </excludes>
+              </artifactSet>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -51,21 +69,64 @@
   </build>
 
   <repositories>
-      <repository>
-        <id>papermc-repo</id>
-        <url>https://repo.papermc.io/repository/maven-public/</url>
-      </repository>
+    <repository>
+      <id>papermc-repo</id>
+      <url>https://repo.papermc.io/repository/maven-public/</url>
+    </repository>
     <repository>
       <id>sonatype</id>
       <url>https://oss.sonatype.org/content/groups/public/</url>
     </repository>
+    <repository>
+      <id>aikar</id>
+      <url>https://repo.aikar.co/content/groups/aikar/</url>
+    </repository>
+    <repository> <!-- For bStats, though it's often on Sonatype/Maven Central too -->
+      <id>codemc-repo</id>
+      <url>https://repo.codemc.io/repository/maven-public/</url>
+    </repository>
+    <repository> <!-- JitPack for any other potential dependencies if needed later -->
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
   </repositories>
 
   <dependencies>
+    <!-- Paper API -->
     <dependency>
       <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>
-      <version>1.21.5-R0.1-SNAPSHOT</version>
+      <version>${paper.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- ACF (Aikar Command Framework) -->
+    <dependency>
+      <groupId>co.aikar</groupId>
+      <artifactId>acf-paper</artifactId>
+      <version>${acf.version}</version>
+    </dependency>
+
+    <!-- HikariCP for Database Connection Pooling -->
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+      <version>${hikaricp.version}</version>
+    </dependency>
+
+    <!-- bStats for Metrics -->
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bukkit</artifactId>
+      <version>${bstats.version}</version>
+      <scope>compile</scope> <!-- bStats recommends compile scope, it handles its own shading if needed by itself -->
+    </dependency>
+
+    <!-- Lombok for boilerplate code reduction -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

@@ -1,0 +1,71 @@
+# CufufyCore Configuration
+
+# Database Settings
+# The core plugin can manage a database connection pool (HikariCP) for itself and other modules.
+database:
+  # Set to false to disable the database service entirely.
+  # Modules attempting to use it will receive an error or null connection.
+  enabled: true
+
+  # Database type. Supported options: "sqlite", "mysql", "mariadb", "postgresql"
+  type: "sqlite"
+
+  # === SQLite Specific Settings ===
+  # File name for the SQLite database, relative to the CufufyCore plugin data folder.
+  # Only used if type is "sqlite".
+  sqlite_file: "cufufy_database.db"
+
+  # === Credentials for MySQL, MariaDB, PostgreSQL ===
+  # These are only used if type is "mysql", "mariadb", or "postgresql".
+  credentials:
+    host: "localhost"
+    port: 3306 # Default MySQL/MariaDB port. Use 5432 for PostgreSQL.
+    database: "cufufy_core" # The name of the database.
+    username: "your_username"
+    password: "your_password"
+    # Optional: Additional JDBC connection string properties.
+    # Example for MySQL/MariaDB: "?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true"
+    # Example for PostgreSQL: "?sslmode=disable"
+    # Ensure properties are URL-encoded if they contain special characters.
+    properties: "?useUnicode=true&characterEncoding=utf8"
+
+  # === HikariCP Connection Pool Settings ===
+  pool_settings:
+    pool_name: "CufufyCore-HikariPool"
+    # Maximum number of connections in the pool.
+    maximum_pool_size: 10
+    # Minimum number of idle connections to maintain.
+    minimum_idle: 2
+    # Maximum lifetime of a connection in the pool (milliseconds).
+    # Default: 1800000 (30 minutes)
+    max_lifetime_ms: 1800000
+    # Connection timeout (milliseconds). How long to wait for a connection from the pool.
+    # Default: 30000 (30 seconds)
+    connection_timeout_ms: 30000
+    # Idle timeout (milliseconds). How long a connection can be idle before being retired.
+    # Default: 600000 (10 minutes)
+    idle_timeout_ms: 600000
+    # Advanced HikariCP DataSource properties.
+    # These are passed directly to HikariConfig.addDataSourceProperty(key, value).
+    # Refer to HikariCP documentation for available properties.
+    # Example:
+    # properties:
+    #   cachePrepStmts: "true"
+    #   prepStmtCacheSize: "250"
+    #   prepStmtCacheSqlLimit: "2048"
+    #   useServerPrepStmts: "true"
+    properties: {}
+
+# Other core plugin settings can go here.
+# For example:
+# general:
+#   debug_mode: false
+#   language: "en"
+
+metrics:
+  # Set to true to enable bStats metrics collection for CufufyCore itself.
+  # CufufyCore must be registered on bstats.org and the correct plugin ID
+  # must be set in the MetricsService.java class.
+  core_bstats_enabled: true
+  # Future: Could add a global toggle for module metrics if desired
+  # allow_module_metrics: true
