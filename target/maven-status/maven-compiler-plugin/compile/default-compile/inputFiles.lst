@@ -2,5 +2,6 @@
 /app/src/main/java/com/cufufy/cufufyCore/commands/CoreCommands.java
 /app/src/main/java/com/cufufy/cufufyCore/config/ConfigManager.java
 /app/src/main/java/com/cufufy/cufufyCore/database/DatabaseService.java
+/app/src/main/java/com/cufufy/cufufyCore/metrics/MetricsService.java
 /app/src/main/java/com/cufufy/cufufyCore/module/CufufyModule.java
 /app/src/main/java/com/cufufy/cufufyCore/module/ModuleManager.java

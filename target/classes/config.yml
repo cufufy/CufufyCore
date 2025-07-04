@@ -61,3 +61,10 @@ database:
 # general:
 #   debug_mode: false
 #   language: "en"
+
+metrics:
+  # Set to false to disable bStats metrics collection for CufufyCore itself.
+  # Modules may have their own bStats instances and will respect their own configurations or this service.
+  core_bstats_enabled: true
+  # Optional: You could add a global switch for all module metrics here if desired in the future
+  # modules_enabled: true
