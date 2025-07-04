@@ -45,12 +45,27 @@
             </goals>
             <configuration>
               <createDependencyReducedPom>false</createDependencyReducedPom>
-              <!-- We don't want to shade dependencies that satellite plugins will use from the core -->
+              <relocations>
+                <relocation>
+                  <pattern>co.aikar.commands</pattern>
+                  <shadedPattern>com.cufufy.cufufycore.lib.acf</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>co.aikar.locales</pattern>
+                  <shadedPattern>com.cufufy.cufufycore.lib.locales</shadedPattern>
+                </relocation>
+              </relocations>
               <artifactSet>
+                <includes>
+                  <include>co.aikar:acf-paper</include>
+                </includes>
                 <excludes>
-                  <exclude>co.aikar:acf-paper</exclude>
-                  <exclude>com.zaxxer:HikariCP</exclude>
-                  <exclude>org.bstats:*</exclude>
+                  <!-- Exclude HikariCP and bStats if they are intended to be used as separate plugins or provided by another core plugin -->
+                  <!-- For this case, we assume CufufyCore might be the one providing them, so they are NOT excluded here by default. -->
+                  <!-- If other plugins are also shading HikariCP or bStats, you might want to exclude them -->
+                  <!-- <exclude>com.zaxxer:HikariCP</exclude> -->
+                  <!-- <exclude>org.bstats:*</exclude> -->
+
                   <!-- Lombok is compile-time only, but good practice to exclude if ever not 'provided' -->
                   <exclude>org.projectlombok:lombok</exclude>
                 </excludes>
