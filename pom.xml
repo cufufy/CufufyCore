@@ -47,13 +47,10 @@
               <artifactSet>
                 <includes>
                   <include>co.aikar:acf-paper</include>
+                  <include>com.zaxxer:HikariCP</include>
+                  <include>org.bstats:bstats-bukkit</include>
                 </includes>
                 <excludes>
-                  <!-- Exclude HikariCP if it's intended to be used as a separate plugin or provided by another core plugin -->
-                  <!-- For this case, we assume CufufyCore might be the one providing them, so they are NOT excluded here by default. -->
-                  <!-- If other plugins are also shading HikariCP, you might want to exclude it -->
-                  <!-- <exclude>com.zaxxer:HikariCP</exclude> -->
-
                   <!-- Lombok is compile-time only, but good practice to exclude if ever not 'provided' -->
                   <exclude>org.projectlombok:lombok</exclude>
                 </excludes>
@@ -66,6 +63,14 @@
                 <relocation>
                   <pattern>co.aikar.locales</pattern>
                   <shadedPattern>com.cufufy.cufufycore.lib.locales</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.zaxxer.hikari</pattern>
+                  <shadedPattern>com.cufufy.cufufycore.lib.hikaricp</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.bstats</pattern>
+                  <shadedPattern>com.cufufy.cufufycore.lib.bstats</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
@@ -121,6 +126,14 @@
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
       <version>${hikaricp.version}</version>
+    </dependency>
+
+    <!-- bStats for Metrics -->
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bukkit</artifactId>
+      <version>3.0.2</version>
+      <scope>compile</scope> <!-- Ensure it's compiled and shaded -->
     </dependency>
 
     <!-- Lombok for boilerplate code reduction -->
