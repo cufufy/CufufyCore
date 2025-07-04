@@ -16,7 +16,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <acf.version>0.5.1-SNAPSHOT</acf.version> <!-- Check for latest ACF version -->
     <hikaricp.version>5.1.0</hikaricp.version>
-    <bstats.version>3.0.2</bstats.version>
     <lombok.version>1.18.32</lombok.version>
     <paper.version>1.21.6-R0.1-SNAPSHOT</paper.version> <!-- Updated Paper API version -->
   </properties>
@@ -48,7 +47,6 @@
               <artifactSet>
                 <includes>
                   <include>co.aikar:acf-paper</include>
-                  <include>org.bstats:bstats-bukkit</include>
                 </includes>
                 <excludes>
                   <!-- Exclude HikariCP if it's intended to be used as a separate plugin or provided by another core plugin -->
@@ -68,10 +66,6 @@
                 <relocation>
                   <pattern>co.aikar.locales</pattern>
                   <shadedPattern>com.cufufy.cufufycore.lib.locales</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>org.bstats</pattern>
-                  <shadedPattern>com.cufufy.cufufycore.lib.bstats</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
@@ -100,10 +94,6 @@
       <id>aikar</id>
       <url>https://repo.aikar.co/content/groups/aikar/</url>
     </repository>
-    <repository> <!-- For bStats, though it's often on Sonatype/Maven Central too -->
-      <id>codemc-repo</id>
-      <url>https://repo.codemc.io/repository/maven-public/</url>
-    </repository>
     <repository> <!-- JitPack for any other potential dependencies if needed later -->
         <id>jitpack.io</id>
         <url>https://jitpack.io</url>
@@ -131,14 +121,6 @@
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
       <version>${hikaricp.version}</version>
-    </dependency>
-
-    <!-- bStats for Metrics -->
-    <dependency>
-      <groupId>org.bstats</groupId>
-      <artifactId>bstats-bukkit</artifactId>
-      <version>${bstats.version}</version>
-      <scope>compile</scope> <!-- bStats recommends compile scope, it handles its own shading if needed by itself -->
     </dependency>
 
     <!-- Lombok for boilerplate code reduction -->
