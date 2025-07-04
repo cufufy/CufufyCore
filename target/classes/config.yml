@@ -61,11 +61,3 @@ database:
 # general:
 #   debug_mode: false
 #   language: "en"
-
-metrics:
-  # Set to true to enable bStats metrics collection for CufufyCore itself.
-  # CufufyCore must be registered on bstats.org and the correct plugin ID
-  # must be set in the MetricsService.java class.
-  core_bstats_enabled: true
-  # Future: Could add a global toggle for module metrics if desired
-  # allow_module_metrics: true

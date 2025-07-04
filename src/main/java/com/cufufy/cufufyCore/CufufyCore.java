@@ -11,7 +11,6 @@ public final class CufufyCore extends JavaPlugin {
     private PaperCommandManager commandManager;
     private com.cufufy.cufufyCore.database.DatabaseService databaseService; // FQDN to avoid import clash if any
     private com.cufufy.cufufyCore.config.ConfigManager configManager;
-    private com.cufufy.cufufyCore.metrics.MetricsService metricsService;
 
     @Override
     public void onLoad() {
@@ -45,12 +44,6 @@ public final class CufufyCore extends JavaPlugin {
         // Initialize ConfigManager
         this.configManager = new com.cufufy.cufufyCore.config.ConfigManager(this);
         getLogger().info("ConfigManager initialized.");
-
-        // Initialize MetricsService
-        // This should be after config is loaded if MetricsService depends on config values (which it does)
-        this.metricsService = new com.cufufy.cufufyCore.metrics.MetricsService(this);
-        // MetricsService logs its own status
-
 
         getLogger().info("CufufyCore has been enabled.");
 
@@ -166,24 +159,5 @@ public final class CufufyCore extends JavaPlugin {
     // Static accessor for modules to easily get the ConfigManager
     public static com.cufufy.cufufyCore.config.ConfigManager getCoreConfigManager() {
         return getInstance().getConfigManager();
-    }
-
-    /**
-     * Gets the MetricsService instance.
-     * Modules can use this to register their own bStats ID.
-     *
-     * @return The MetricsService instance.
-     * @throws IllegalStateException if the plugin or metrics service is not initialized yet.
-     */
-    public com.cufufy.cufufyCore.metrics.MetricsService getMetricsService() {
-        if (metricsService == null) {
-            throw new IllegalStateException("MetricsService is not available yet. CufufyCore might not be fully enabled.");
-        }
-        return metricsService;
-    }
-
-    // Static accessor for modules to easily get the MetricsService
-    public static com.cufufy.cufufyCore.metrics.MetricsService getCoreMetricsService() {
-        return getInstance().getMetricsService();
     }
 }
