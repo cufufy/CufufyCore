@@ -36,9 +36,20 @@ public class ModuleManager {
             module.onModuleEnable((CufufyCore) corePlugin);
             modules.put(moduleName.toLowerCase(), module);
             corePlugin.getLogger().info("Registered and enabled module: " + moduleName + " v" + module.getModuleVersion());
+
+            // Register metrics for the module
+            if (corePlugin.getMetricsService() != null) { // Ensure MetricsService is initialized
+                corePlugin.getMetricsService().registerModuleMetrics(module);
+            } else {
+                corePlugin.getLogger().warning("[Metrics] MetricsService not available when registering module: " + moduleName);
+            }
+
         } catch (Exception e) {
             corePlugin.getLogger().log(Level.SEVERE, "Error enabling module: " + moduleName, e);
             // Optionally, unregister or mark as failed if onModuleEnable throws an exception
+            if (corePlugin.getMetricsService() != null) {
+                corePlugin.getMetricsService().unregisterModuleMetrics(module); // Attempt to clean up metrics if module failed to enable
+            }
         }
     }
 
@@ -51,6 +62,10 @@ public class ModuleManager {
         if (modules.containsKey(moduleName.toLowerCase())) {
             try {
                 module.onModuleDisable();
+                // Unregister metrics for the module
+                if (corePlugin.getMetricsService() != null) {
+                    corePlugin.getMetricsService().unregisterModuleMetrics(module);
+                }
                 modules.remove(moduleName.toLowerCase());
                 corePlugin.getLogger().info("Unregistered and disabled module: " + moduleName);
             } catch (Exception e) {

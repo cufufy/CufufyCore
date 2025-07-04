@@ -2,6 +2,7 @@ package com.cufufy.cufufyCore;
 
 import co.aikar.commands.PaperCommandManager;
 import com.cufufy.cufufyCore.module.ModuleManager;
+import com.cufufy.cufufyCore.metrics.MetricsService; // Added import for MetricsService
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CufufyCore extends JavaPlugin {
@@ -11,6 +12,7 @@ public final class CufufyCore extends JavaPlugin {
     private PaperCommandManager commandManager;
     private com.cufufy.cufufyCore.database.DatabaseService databaseService; // FQDN to avoid import clash if any
     private com.cufufy.cufufyCore.config.ConfigManager configManager;
+    private MetricsService metricsService; // Added MetricsService instance
 
     @Override
     public void onLoad() {
@@ -44,6 +46,12 @@ public final class CufufyCore extends JavaPlugin {
         // Initialize ConfigManager
         this.configManager = new com.cufufy.cufufyCore.config.ConfigManager(this);
         getLogger().info("ConfigManager initialized.");
+
+        // Initialize MetricsService
+        // This should be after config is loaded as it checks config for enabling core metrics
+        this.metricsService = new MetricsService(this);
+        getLogger().info("MetricsService initialized.");
+
 
         getLogger().info("CufufyCore has been enabled.");
 
@@ -159,5 +167,23 @@ public final class CufufyCore extends JavaPlugin {
     // Static accessor for modules to easily get the ConfigManager
     public static com.cufufy.cufufyCore.config.ConfigManager getCoreConfigManager() {
         return getInstance().getConfigManager();
+    }
+
+    /**
+     * Gets the MetricsService instance.
+     *
+     * @return The MetricsService instance.
+     * @throws IllegalStateException if the plugin or metrics service is not initialized yet.
+     */
+    public MetricsService getMetricsService() {
+        if (metricsService == null) {
+            throw new IllegalStateException("MetricsService is not available yet. CufufyCore might not be fully enabled.");
+        }
+        return metricsService;
+    }
+
+    // Static accessor for modules to easily get the MetricsService
+    public static MetricsService getCoreMetricsService() {
+        return getInstance().getMetricsService();
     }
 }

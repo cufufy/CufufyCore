@@ -48,4 +48,11 @@ public interface CufufyModule {
      * @return The JavaPlugin instance of this module.
      */
     JavaPlugin getPluginInstance();
+
+    /**
+     * @return The bStats plugin ID for this specific module.
+     *         Return 0 or a negative number if this module does not use bStats
+     *         or if metrics should be disabled for it.
+     */
+    int getBstatsPluginId();
 }
