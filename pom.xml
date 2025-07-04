@@ -49,6 +49,7 @@
                   <include>co.aikar:acf-paper</include>
                   <include>com.zaxxer:HikariCP</include>
                   <include>org.bstats:bstats-bukkit</include>
+                  <include>org.bstats:bstats-base</include> <!-- Add bstats-base for MetricsBase -->
                 </includes>
                 <excludes>
                   <!-- Lombok is compile-time only, but good practice to exclude if ever not 'provided' -->
