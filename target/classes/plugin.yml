@@ -2,6 +2,8 @@ name: CufufyCore
 version: '1.0-SNAPSHOT' # Use version from pom.xml
 main: com.cufufy.cufufyCore.CufufyCore
 api-version: '1.21'
+depend:
+  - acf
 authors: [YourName] # TODO: Replace with actual author
 description: Core plugin for Cufufy project, providing shared functionalities.
 website: https://www.example.com # TODO: Replace with actual website
