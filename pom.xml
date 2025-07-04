@@ -45,16 +45,6 @@
             </goals>
             <configuration>
               <createDependencyReducedPom>false</createDependencyReducedPom>
-              <relocations>
-                <relocation>
-                  <pattern>co.aikar.commands</pattern>
-                  <shadedPattern>com.cufufy.cufufycore.lib.acf</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>co.aikar.locales</pattern>
-                  <shadedPattern>com.cufufy.cufufycore.lib.locales</shadedPattern>
-                </relocation>
-              </relocations>
               <artifactSet>
                 <includes>
                   <include>co.aikar:acf-paper</include>

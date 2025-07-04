@@ -1,7 +1,7 @@
 com/cufufy/cufufyCore/module/CufufyModule.class
 com/cufufy/cufufyCore/metrics/MetricsService.class
 com/cufufy/cufufyCore/config/ConfigManager.class
-com/cufufy/cufufyCore/commands/CoreCommands.class
 com/cufufy/cufufyCore/database/DatabaseService.class
+com/cufufy/cufufyCore/commands/CoreCommands.class
 com/cufufy/cufufyCore/module/ModuleManager.class
 com/cufufy/cufufyCore/CufufyCore.class
