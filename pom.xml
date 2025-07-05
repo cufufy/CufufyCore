@@ -11,6 +11,14 @@
 
   <name>cufufycore</name>
 
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub cufufy Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/cufufy/CufufyCore</url>
+    </repository>
+  </distributionManagement>
+
   <properties>
     <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -99,10 +107,6 @@
     <repository>
       <id>aikar</id>
       <url>https://repo.aikar.co/content/groups/aikar/</url>
-    </repository>
-    <repository> <!-- JitPack for any other potential dependencies if needed later -->
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
     </repository>
   </repositories>
 
