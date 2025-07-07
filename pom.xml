@@ -145,4 +145,17 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub cufufy Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/cufufy/CufufyCore</url>
+    </repository>
+    <snapshotRepository>
+      <id>github</id>
+      <name>GitHub cufufy Apache Maven Packages Snapshots</name>
+      <url>https://maven.pkg.github.com/cufufy/CufufyCore</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
