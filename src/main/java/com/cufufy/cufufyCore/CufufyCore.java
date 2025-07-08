@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager;
 import com.cufufy.cufufyCore.module.ModuleManager;
 import com.cufufy.cufufyCore.metrics.MetricsService; // Added import for MetricsService
 import org.bukkit.plugin.java.JavaPlugin;
+import java.util.logging.Level;
 
 public final class CufufyCore extends JavaPlugin {
 
@@ -25,13 +26,25 @@ public final class CufufyCore extends JavaPlugin {
         this.moduleManager = new ModuleManager(this);
 
         // Initialize ACF PaperCommandManager
+        getLogger().info("Initializing PaperCommandManager...");
         this.commandManager = new PaperCommandManager(this);
+        if (this.commandManager != null) {
+            getLogger().info("PaperCommandManager initialized successfully. Class: " + this.commandManager.getClass().getName() + ", Instance HashCode: " + this.commandManager.hashCode());
+        } else {
+            getLogger().severe("PaperCommandManager initialization FAILED!");
+        }
         // Configure ACF (e.g., command completions, contexts, locales) if needed globally
         // For now, basic initialization is sufficient. Modules can add their own.
 
         // Register CufufyCore's own commands
-        this.commandManager.registerCommand(new com.cufufy.cufufyCore.commands.CoreCommands(this, this.moduleManager));
-        getLogger().info("ACF PaperCommandManager initialized and core commands registered.");
+        getLogger().info("Registering CufufyCore's own commands...");
+        try {
+            this.commandManager.registerCommand(new com.cufufy.cufufyCore.commands.CoreCommands(this, this.moduleManager));
+            getLogger().info("CufufyCore's own commands registered successfully.");
+        } catch (Exception e) {
+            getLogger().log(Level.SEVERE, "Error registering CufufyCore's own commands", e);
+        }
+        // getLogger().info("ACF PaperCommandManager initialized and core commands registered."); // Original log, now covered by detailed ones
 
         // Initialize DatabaseService
         // This needs to be after saveDefaultConfig to ensure config.yml is available
@@ -122,15 +135,25 @@ public final class CufufyCore extends JavaPlugin {
      * @throws IllegalStateException if the plugin or command manager is not initialized yet.
      */
     public PaperCommandManager getCommandManager() {
+        getLogger().info("CufufyCore.getCommandManager() called.");
         if (commandManager == null) {
+            getLogger().warning("CufufyCore.getCommandManager() called, but commandManager is null!");
             throw new IllegalStateException("PaperCommandManager is not available yet. CufufyCore might not be fully enabled.");
         }
+        getLogger().info("Returning commandManager instance: " + commandManager.hashCode());
         return commandManager;
     }
 
     // Static accessor for modules to easily get the PaperCommandManager
     public static PaperCommandManager getCoreCommandManager() {
-        return getInstance().getCommandManager();
+        getInstance().getLogger().info("CufufyCore.getCoreCommandManager() (static) called.");
+        PaperCommandManager manager = getInstance().getCommandManager();
+        if (manager != null) {
+            getInstance().getLogger().info("CufufyCore.getCoreCommandManager() (static) returning manager instance: " + manager.hashCode());
+        } else {
+            getInstance().getLogger().warning("CufufyCore.getCoreCommandManager() (static) but getCommandManager() returned null!");
+        }
+        return manager;
     }
 
     /**
