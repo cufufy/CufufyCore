@@ -260,6 +260,62 @@ CufufyCore provides static accessor methods for its services:
     // For most uses, just implementing getBstatsPluginId() in CufufyModule is enough.
     ```
 
+### Developing Modules with ACF Commands
+
+CufufyCore utilizes the Aikar Command Framework (ACF) for command handling and provides access to its command manager for modules.
+
+**Important: ACF Shading and Annotation Usage**
+
+CufufyCore embeds (shades) ACF directly into its JAR. During this process, ACF's packages are relocated to prevent conflicts with other plugins. Specifically:
+
+- The standard `co.aikar.commands` package is relocated to `com.cufufy.cufufycore.lib.acf`.
+- The standard `co.aikar.locales` package is relocated to `com.cufufy.cufufycore.lib.locales`.
+
+When creating command classes in your module that extend `com.cufufy.cufufycore.lib.acf.BaseCommand` (which is the shaded version of ACF's `BaseCommand`), you **must** import ACF annotations from the shaded package path.
+
+**Example of correct annotation imports in your module's command class:**
+
+```java
+// In your module's command class (e.g., MyModuleCommand.java)
+package com.myplugin.mymodule.commands;
+
+import com.cufufy.cufufycore.lib.acf.BaseCommand; // Correct BaseCommand
+import com.cufufy.cufufycore.lib.acf.annotation.*; // Correct import for ALL ACF annotations
+// import com.cufufy.cufufycore.lib.acf.annotation.CommandAlias; // Or import specific annotations
+// import com.cufufy.cufufycore.lib.acf.annotation.Default;
+// import com.cufufy.cufufycore.lib.acf.annotation.Subcommand;
+
+import org.bukkit.command.CommandSender;
+
+@CommandAlias("mymodulecmd")
+public class MyModuleCommand extends BaseCommand {
+
+    @Default
+    public void onDefault(CommandSender sender) {
+        sender.sendMessage("MyModule default command executed!");
+    }
+    
+    @Subcommand("hello")
+    public void onHello(CommandSender sender) {
+        sender.sendMessage("Hello from MyModule!");
+    }
+}
+```
+
+Using incorrect imports (e.g., `import co.aikar.commands.annotation.*;`) will likely result in your module's commands not being registered or recognized by CufufyCore, even if your module compiles successfully.
+
+**Registering Commands from Your Module:**
+
+In your module's `onModuleEnable(CufufyCore coreInstance)` method, you can get the command manager and register your commands like so:
+
+```java
+// Note: The type PaperCommandManager should also be from the shaded package if you declare it explicitly
+// com.cufufy.cufufycore.lib.acf.PaperCommandManager commandManager = coreInstance.getCoreCommandManager(); 
+// However, CufufyCore.getCoreCommandManager() already returns the correct type.
+var commandManager = coreInstance.getCoreCommandManager(); // Using var for simplicity
+commandManager.registerCommand(new MyModuleCommand(/* any dependencies */)); 
+```
+
 ### Example Usage Snippets
 
 **Registering your plugin as a module (in your plugin's `onEnable`):**
@@ -288,12 +344,7 @@ public void onEnable() {
 *Make sure to add `depend: [CufufyCore]` to your `plugin.yml`.*
 
 **Registering a command for your module:**
-
-```java
-// In your module's onModuleEnable (or onEnable after confirming core is ready)
-// Assuming MyModuleCommands extends co.aikar.commands.BaseCommand
-CufufyCore.getCoreCommandManager().registerCommand(new MyModuleCommands(this /* pass plugin instance or necessary dependencies */));
-```
+*(This is now better covered in the "Developing Modules with ACF Commands" section)*
 
 **Accessing the database:**
 
