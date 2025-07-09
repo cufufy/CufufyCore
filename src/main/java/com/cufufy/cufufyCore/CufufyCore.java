@@ -30,6 +30,16 @@ public final class CufufyCore extends JavaPlugin {
         this.commandManager = new PaperCommandManager(this);
         if (this.commandManager != null) {
             getLogger().info("PaperCommandManager initialized successfully. Class: " + this.commandManager.getClass().getName() + ", Instance HashCode: " + this.commandManager.hashCode());
+
+            // Enable ACF debugging and exception handling
+            this.commandManager.setExceptionHandler((command, registeredCommand, sender, args, t) -> {
+                getLogger().log(Level.SEVERE, "ACF Exception in command '" + command.getName() + "' for sender " + sender.getName() + " with args: " + String.join(" ", args), t);
+                return true; // Mark as handled
+            });
+
+            // Set logger level for the relocated ACF package.
+            java.util.logging.Logger.getLogger("com.cufufy.cufufycore.lib.acf").setLevel(Level.FINER);
+            getLogger().info("ACF ExceptionHandler set and verbose logging for 'com.cufufy.cufufycore.lib.acf' configured to FINER.");
         } else {
             getLogger().severe("PaperCommandManager initialization FAILED!");
         }
